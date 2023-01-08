@@ -1,0 +1,11 @@
+def change_char(string, index, new_char):
+  if index < 0 or index >= len(string):
+    return "Index out of range"
+  
+  new_string = string[:index] + new_char + string[index+1:]
+  return new_string
+
+string = "Hello, World!"
+index = 4
+new_char = 's'
+print(change_char(string, index, new_char))
