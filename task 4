@@ -1,0 +1,86 @@
+import csv
+from datetime import datetime
+
+def create_contact(username, email, phone_numbers, address):
+    """
+    Creates a new contact with the provided information and saves it to the CSV file.
+    """
+    insertion_date = datetime.now()
+    contact = [username, email, phone_numbers, address, insertion_date]
+
+    filename = f"contactbook_{insertion_date.strftime('%d%m%Y')}.csv"
+    with open(filename, "a") as file:
+        writer = csv.writer(file)
+        writer.writerow(contact)
+
+def update_contact(username, email, phone_numbers, address):
+    """
+    Updates an existing contact with the provided information in the CSV file.
+    """
+    insertion_date = datetime.now()
+    contact = [username, email, phone_numbers, address, insertion_date]
+
+    filename = f"contactbook_{insertion_date.strftime('%d%m%Y')}.csv"
+    with open(filename, "r") as file:
+        reader = csv.reader(file)
+        contacts = list(reader)
+
+    for i, c in enumerate(contacts):
+        if c[0] == username:
+            contacts[i] = contact
+            break
+    else:
+        raise ValueError(f"Contact not found for {username}.")
+
+    with open(filename, "w") as file:
+        writer = csv.writer(file)
+        writer.writerows(contacts)
+
+def delete_contact(username):
+    """
+    Deletes a contact with the provided username from the CSV file.
+    """
+    insertion_date = datetime.now()
+    filename = f"contactbook_{insertion_date.strftime('%d%m%Y')}.csv"
+    with open(filename, "r") as file:
+        reader = csv.reader(file)
+        contacts = list(reader)
+
+    for i, c in enumerate(contacts):
+        if c[0] == username:
+            del contacts[i]
+            break
+    else:
+        raise ValueError(f"Contact not found for {username}.")
+
+    with open(filename, "w") as file:
+        writer = csv.writer(file)
+        writer.writerows(contacts)
+# User input example
+username = input("Enter username: ")
+email = input("Enter email: ")
+phone_numbers = input("Enter phone numbers (separated by commas): ").split(",")
+address = input("Enter address: ")
+
+create_contact(username, email, phone_numbers, address)
+
+# Bulk file input example
+filename = input("Enter file name: ")
+with open(filename, "r") as file:
+    reader = csv.reader(file)
+    contacts = list(reader)
+    for contact in contacts:
+        create_contact(*contact)
+
+# update contact example
+username = input("Enter username to update: ")
+email = input("Enter new email: ")
+phone_numbers = input("Enter new phone numbers (separated by commas): ").split(",")
+address = input("Enter new address: ")
+
+update_contact(username, email, phone_numbers, address)
+
+# delete contact example
+username = input("Enter username to delete: ")
+
+delete_contact(username)
